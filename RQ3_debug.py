@@ -63,7 +63,7 @@ import numpy as np
 import torch
 from collections import defaultdict  # [수정] 누락되어 있던 import 추가 (calculate_metrics에서 사용)
 
-access_token = "<HF token here>"
+access_token ='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'
 login(token=access_token)
 
 
