@@ -40,17 +40,11 @@
     Strictly give your answer using the following format: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". Do not write any explanation.
     """,
     "prompt_fs_eng_rq3" : """
-    Consider the following example scenarios, the action selected by person A, and the most important decision making factor.
-    Scenario: "[EMO_SCENARIO]"; Emotion influenced Action: "[EMO_GT]"
-    Scenario: "[MOR_SCENARIO]"; Moral influenced Action: "[MOR_GT]"
-    Scenario: "[CUL_SCENARIO]"; Culture influenced Action: "[CUL_GT]"
-    Scenario: "[RES_SCENARIO]"; Responsibility influenced Action: "[RES_GT]"
-    Scenario: "[REL_SCENARIO]"; Relationship influenced Action: "[REL_GT]"
-    Scenario: "[LEG_SCENARIO]"; Legality influenced Action: "[LEG_GT]"
-    Scenario: "[POL_SCENARIO]"; Politeness influenced Action: "[POL_GT]"
-    Scenario: "[SAC_SCENARIO]"; Sacred values influenced Action: "[SAC_GT]"
+    Consider the following example scenario, the action selected by person A, and the contributing factor this action was influenced by.
+    Scenario: "[FS_SCENARIO]"; Selection Action: "[FS_ACTION]"; Action type: "[FS_CONTRIBUTING_FACTOR]"
 
     Now, given the following scenario, and the action taken for the scenario by person A, your job is to identify the most important factor that contributed in the person's decision making out of the following ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    Scenario: "[SCENARIO]", possible actions: "[ACTIONS]", and action taken: "[SELECTED_ACTION]".
     Strictly give your answer using the following format: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". Do not write any explanation.
     """,
     "prompt_fs2_eng_rq3" : """
@@ -101,18 +95,12 @@
     严格按照以下格式给出你的回答: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>."。不要写任何解释。
     """,
     "prompt_fs_chi_rq3" : """
-    考虑以下示例情境, A 选择的行动以及最重要的决定因素. 
-    情境: "[EMO_SCENARIO]"; 受情感影响的行动: "[EMO_GT]"
-    情境: "[MOR_SCENARIO]"; 受道德影响的行动: "[MOR_GT]"
-    情境: "[CUL_SCENARIO]"; 受文化影响的行动: "[CUL_GT]"
-    情境: "[RES_SCENARIO]"; 受责任影响的行动: "[RES_GT]"
-    情境: "[REL_SCENARIO]"; 受关系影响的行动: "[REL_GT]"
-    情境: "[LEG_SCENARIO]"; 受法律影响的行动: "[LEG_GT]"
-    情境: "[POL_SCENARIO]"; 受礼貌影响的行动: "[POL_GT]"
-    情境: "[SAC_SCENARIO]"; 受神圣价值观影响的行动: "[SAC_GT]"
+    考虑以下示例场景，A 选择的操作，以及对该操作产生影响的因素。
+    场景: "[FS_SCENARIO]"; 选择的操作: "[FS_ACTION]"; 操作类型: "[FS_CONTRIBUTING_FACTOR]"
 
-    现在, 鉴于以下情境以及 A 选择的行动, 你的任务是从以下因素中确定最重要的决定因素: ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values']. 
-    严格按照以下格式回答: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". 不要写任何解释. 
+    现在，给定以下场景，以及 A 在场景中采取的行动，你的任务是从以下 ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'] 中识别出对该人决策最重要的影响因素。
+    场景："[SCENARIO]"，可能行为："[ACTIONS]"，实际采取的行为："[SELECTED_ACTION]"。
+    严格按照以下格式给出答案: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>."。不要写任何解释。
     """,
     "prompt_fs2_chi_rq3" : """
     考虑以下示例场景，A 选择的操作，以及对该操作产生影响的因素。
@@ -163,18 +151,12 @@
     Строго дайте свой ответ, используя следующий формат: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". Не пишите никаких объяснений.
     """,
     "prompt_fs_rus_rq3" : """
-    Рассмотрите следующие примеры сценариев, выбранные человеком A действия и наиболее важный фактор принятия решения.
-    Сценарий: "[EMO_SCENARIO]"; Действие, обусловленное эмоциями: "[EMO_GT]"
-    Сценарий: "[MOR_SCENARIO]"; Действие, обусловленное моралью: "[MOR_GT]"
-    Сценарий: "[CUL_SCENARIO]"; Действие, обусловленное культурой: "[CUL_GT]"
-    Сценарий: "[RES_SCENARIO]"; Действие, обусловленное ответственностью: "[RES_GT]"
-    Сценарий: "[REL_SCENARIO]"; Действие, обусловленное отношениями: "[REL_GT]"
-    Сценарий: "[LEG_SCENARIO]"; Действие, обусловленное законностью: "[LEG_GT]"
-    Сценарий: "[POL_SCENARIO]"; Действие, обусловленное вежливостью: "[POL_GT]"
-    Сценарий: "[SAC_SCENARIO]"; Действие, обусловленное священными ценностями: "[SAC_GT]"
+    Рассмотрите следующий пример сценария, действие, выбранное человеком A, и фактор, повлиявший на это действие.
+    Сценарий: "[FS_SCENARIO]"; Выбранное действие: "[FS_ACTION]"; Тип действия: "[FS_CONTRIBUTING_FACTOR]"
 
-    Теперь, учитывая следующий сценарий и действие, выбранное человеком A, ваша задача -определить наиболее важный фактор, повлиявший на принятие решения, из следующих: ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
-    Дайте ответ строго в следующем формате: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". Не давайте никаких объяснений.
+    Теперь, учитывая следующий сценарий и действие, предпринятое человеком A, ваша задача — определить самый важный фактор, который повлиял на принятие решения человеком из следующих ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    Сценарий: "[SCENARIO]", возможные действия: "[ACTIONS]", выбранное действие: "[SELECTED_ACTION]".
+    Строго дайте ваш ответ в следующем формате: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". Не пишите никаких объяснений.
     """,
     "prompt_fs2_rus_rq3" : """
     Рассмотрите следующий пример сценария, действие, выбранное человеком A, и фактор, повлиявший на это действие.
@@ -224,18 +206,12 @@
     Da tu respuesta estrictamente usando el siguiente formato: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". No escribas ninguna explicación.
     """,
     "prompt_fs_spa_rq3" : """
-    Considera los siguientes escenarios de ejemplo, la acción seleccionada por la persona A, y el factor más importante en la toma de decisión.
-    Escenario: "[EMO_SCENARIO]"; Acción influenciada por Emoción: "[EMO_GT]"
-    Escenario: "[MOR_SCENARIO]"; Acción influenciada por Moral: "[MOR_GT]"
-    Escenario: "[CUL_SCENARIO]"; Acción influenciada por Cultura: "[CUL_GT]"
-    Escenario: "[RES_SCENARIO]"; Acción influenciada por Responsabilidad: "[RES_GT]"
-    Escenario: "[REL_SCENARIO]"; Acción influenciada por Relaciones: "[REL_GT]"
-    Escenario: "[LEG_SCENARIO]"; Acción influenciada por Legalidad: "[LEG_GT]"
-    Escenario: "[POL_SCENARIO]"; Acción influenciada por Cortesía: "[POL_GT]"
-    Escenario: "[SAC_SCENARIO]"; Acción influenciada por Valores Sagrados: "[SAC_GT]"
+    Considera el siguiente ejemplo de escenario, la acción seleccionada por la persona A y el factor contribuyente que influyó en esta acción.
+    Escenario: "[FS_SCENARIO]"; Acción seleccionada: "[FS_ACTION]"; Tipo de acción: "[FS_CONTRIBUTING_FACTOR]"
 
-    Ahora, dado el siguiente escenario y la acción tomada por la persona A, tu tarea es identificar el factor más importante que contribuyó en la toma de decisión de la persona entre los siguientes ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
-    Estrictamente da tu respuesta usando el siguiente formato: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". No escribas ninguna explicación.
+    Ahora, dado el siguiente escenario y la acción tomada para el escenario por la persona A, tu tarea es identificar el factor más importante que contribuyó en la toma de decisiones de la persona de entre los siguientes ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    Escenario: "[SCENARIO]", posibles acciones: "[ACTIONS]", y acción tomada: "[SELECTED_ACTION]".
+    Da estrictamente tu respuesta usando el siguiente formato: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". No escribas ninguna explicación.
     """,
     "prompt_fs2_spa_rq3" : """
     Considera el siguiente ejemplo de escenario, la acción seleccionada por la persona A y el factor contribuyente que influyó en esta acción.
@@ -285,18 +261,12 @@
     قدم إجابتك بدقة باستخدام الصيغة التالية: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". لا تكتب أي تفسير.
     """,
     "prompt_fs_ara_rq3" : """
-    ضع في الاعتبار سيناريوهات المثال التالية,  والإجراء الذي اختارته الشخصية أ,  والعامل الأكثر أهمية في اتخاذ القرار.
-    السيناريو: "[EMO_SCENARIO]"؛ الإجراء المتأثر بالعاطفة: "[EMO_GT]"
-    السيناريو: "[MOR_SCENARIO]"؛ الإجراء المتأثر بالأخلاق: "[MOR_GT]"
-    السيناريو: "[CUL_SCENARIO]"؛ الإجراء المتأثر بالثقافة: "[CUL_GT]"
-    السيناريو: "[RES_SCENARIO]"؛ الإجراء المتأثر بالمسؤوليات: "[RES_GT]"
-    السيناريو: "[REL_SCENARIO]"؛ الإجراء المتأثر بالعلاقات: "[REL_GT]"
-    السيناريو: "[LEG_SCENARIO]"؛ الإجراء المتأثر بالقانونية: "[LEG_GT]"
-    السيناريو: "[POL_SCENARIO]"؛ الإجراء المتأثر بالأدب: "[POL_GT]"
-    السيناريو: "[SAC_SCENARIO]"؛ الإجراء المتأثر بالقيم المقدسة: "[SAC_GT]"
+    اعتبر السيناريو المثالي التالي، الفعل الذي اختاره الشخص A، والعامل المساهم الذي أثر على هذا الفعل.
+    السيناريو: "[FS_SCENARIO]"; الفعل المختار: "[FS_ACTION]"; نوع الفعل: "[FS_CONTRIBUTING_FACTOR]"
 
-    الآن,  بالنظر إلى السيناريو التالي والإجراء الذي اتخذته الشخصية أ,  مهمتك هي تحديد العامل الأكثر أهمية الذي ساهم في اتخاذ قرارها من بين العوامل التالية ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
-    قدم إجابتك بشكل صارم باستخدام التنسيق التالي: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". لا تكتب أي تفسير.
+    الآن، بالنظر إلى السيناريو التالي، والفعل الذي اتخذه الشخص A للسيناريو، مهمتك هي تحديد العامل الأكثر أهمية الذي ساهم في اتخاذ الشخص للقرار من بين العوامل التالية ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values'].
+    السيناريو: "[SCENARIO]"، الإجراءات المحتملة: "[ACTIONS]"، والإجراء الذي تم اتخاذه: "[SELECTED_ACTION]".
+    قدّم إجابتك بصرامة باستخدام التنسيق التالي: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". لا تكتب أي تفسير.
     """,
     "prompt_fs2_ara_rq3" : """
     اعتبر السيناريو المثالي التالي، الفعل الذي اختاره الشخص A، والعامل المساهم الذي أثر على هذا الفعل.
@@ -346,18 +316,12 @@
     अपने उत्तर को निम्नलिखित प्रारूप का उपयोग करके सख्ती से दें: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". कोई स्पष्टीकरण न लिखें।
     """,
     "prompt_fs_hin_rq3" : """
-    निम्नलिखित उदाहरण परिदृश्यों, व्यक्ति A द्वारा चुने गए कार्य, और निर्णय लेने में सबसे महत्वपूर्ण कारक पर विचार करें।
-    परिदृश्य: "[EMO_SCENARIO]"; भावना से प्रभावित कार्य: "[EMO_GT]"
-    परिदृश्य: "[MOR_SCENARIO]"; नैतिकता से प्रभावित कार्य: "[MOR_GT]"
-    परिदृश्य: "[CUL_SCENARIO]"; संस्कृति से प्रभावित कार्य: "[CUL_GT]"
-    परिदृश्य: "[RES_SCENARIO]"; जिम्मेदारी से प्रभावित कार्य: "[RES_GT]"
-    परिदृश्य: "[REL_SCENARIO]"; रिश्तों से प्रभावित कार्य: "[REL_GT]"
-    परिदृश्य: "[LEG_SCENARIO]"; कानूनीता से प्रभावित कार्य: "[LEG_GT]"
-    परिदृश्य: "[POL_SCENARIO]"; शिष्टाचार से प्रभावित कार्य: "[POL_GT]"
-    परिदृश्य: "[SAC_SCENARIO]"; पवित्र मूल्यों से प्रभावित कार्य: "[SAC_GT]"
+    निम्नलिखित उदाहरण परिदृश्य, व्यक्ति A द्वारा चयनित क्रिया, और उस क्रिया को प्रभावित करने वाले सहयोगी कारक पर विचार करें।
+    परिदृश्य: "[FS_SCENARIO]"; चयनित क्रिया: "[FS_ACTION]"; क्रिया का प्रकार: "[FS_CONTRIBUTING_FACTOR]"
 
-    अब, निम्नलिखित परिदृश्य और व्यक्ति A द्वारा इस परिदृश्य के लिए किए गए कार्य को देखते हुए, आपका कार्य यह पहचानना है कि व्यक्ति के निर्णय लेने में सबसे महत्वपूर्ण कारक क्या था, निम्नलिखित में से ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values']।
-    सख्ती से निम्नलिखित प्रारूप में अपना उत्तर दें: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>।" कोई स्पष्टीकरण न लिखें।
+    अब, दिए गए परिदृश्य और व्यक्ति A द्वारा परिदृश्य के लिए की गई क्रिया के आधार पर, आपका कार्य यह पहचानना है कि निम्नलिखित में से कौन सा कारक व्यक्ति के निर्णय लेने में सबसे महत्वपूर्ण भूमिका निभाता है ['Emotions', 'Moral', 'Culture', 'Responsibilities', 'Relationships', 'Legality', 'Politeness', 'Sacred values']।
+    परिदृश्य: "[SCENARIO]", संभावित कार्य: "[ACTIONS]", और चयनित कार्य: "[SELECTED_ACTION]"।
+    अपना उत्तर सख्ती से निम्नलिखित प्रारूप का उपयोग करके दें: "Selected action is <'Emotions', or 'Moral', or 'Culture', or 'Responsibilities', or 'Relationships', or 'Legality', or 'Politeness', or 'Sacred values'>.". कोई स्पष्टीकरण न लिखें।
     """,
     "prompt_fs2_hin_rq3" : """
     निम्नलिखित उदाहरण परिदृश्य, व्यक्ति A द्वारा चयनित क्रिया, और उस क्रिया को प्रभावित करने वाले सहयोगी कारक पर विचार करें।
