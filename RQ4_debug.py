@@ -69,7 +69,12 @@ nltk.download('wordnet', quiet=True)
 nltk.download('omw-1.4', quiet=True)
 nltk.download('punkt', quiet=True)
 
-access_token ='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'
+from pathlib import Path
+_token_path = Path("access_token.txt")
+with _token_path.open("r", encoding="utf-8") as _f:
+    access_token = _f.readline().strip()
+if not access_token:
+    raise ValueError(f"Empty token in {_token_path.resolve()}")
 login(token=access_token)
 
 
