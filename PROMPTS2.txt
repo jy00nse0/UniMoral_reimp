@@ -38,11 +38,8 @@
     Your job is to think like a person who values [CULTURAL_VALUE_1] the most followed by [CULTURAL_VALUE_2], [CULTURAL_VALUE_3], [CULTURAL_VALUE_4], [CULTURAL_VALUE_5], [CULTURAL_VALUE_6];  who selected to do the following action: "[SELECTED_ACTION]". Identify what type of action this is out of the following ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous']. Strictly give your answer using the following format: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". Do not write any explanation.
     """,
     "prompt_fs_eng_rq2" : """
-    Consider the following example scenarios, the action selected by person A, and the type of action that is.
-    Scenario: "[DEO_SCENARIO]"; Deontological Action: "[DEO_GT]"
-    Scenario: "[UTI_SCENARIO]"; Utilitarianism Action: "[UTI_GT]"
-    Scenario: "[RIG_SCENARIO]"; Rights-based Action: "[RIG_GT]"
-    Scenario: "[VIR_SCENARIO]"; Virtous Action: "[VIR_GT]"
+    Consider the following example scenario, the action selected by person A, and the type of action that is.
+    Scenario: "[FS_SCENARIO]"; Selection Action: "[FS_ACTION]"; Action type: "[FS_ACTION_TYPE]"
 
     Now, given the following scenario, and the action taken for the scenario by person A, your job is to identify what type of action did person A took out of the following ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
     Scenario: "[SCENARIO]", possible actions: "[ACTIONS]", and action taken: "[SELECTED_ACTION]".
@@ -99,15 +96,12 @@
     严格按照以下格式给出你的回答："Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>."。不要写任何解释。  
     """  ,
     "prompt_fs_chi_rq2": """
-    请考虑以下示例情境, A 选择的行动以及该行动的类型. 
-    情境:"[DEO_SCENARIO]";义务论行动:"[DEO_GT]"
-    情境:"[UTI_SCENARIO]";功利主义行动:"[UTI_GT]"
-    情境:"[RIG_SCENARIO]";权利基础行动:"[RIG_GT]"
-    情境:"[VIR_SCENARIO]";美德行动:"[VIR_GT]"
+    请考虑以下示例场景、人物A选择的行为及其类型。
+    场景："[FS_SCENARIO]"; 选择行为："[FS_ACTION]"; 行为类型："[FS_ACTION_TYPE]"
 
-    现在, 给定以下情境以及A为该情境采取的行动, 你的任务是判断A所采取的行动属于以下哪种类型:['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous']. 
-    情境:"[SCENARIO]", 可能的行动:"[ACTIONS]", 所采取的行动:"[SELECTED_ACTION]". 
-    请严格按照以下格式给出答案:"Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". 不要写任何解释. 
+    现在给定以下场景和人物A采取的具体行为，你需要从['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous']中识别该行为的类型。
+    场景："[SCENARIO]"，可能行为："[ACTIONS]"，实际采取的行为："[SELECTED_ACTION]"。
+    请严格使用以下格式回答："Selected action is <'Deontological' 或 'Utilitarianism' 或 'Rights-based' 或 'Virtous'>."。不要添加任何解释。
     """,
     "prompt_fs2_chi_rq2" : """
     请考虑以下示例场景、人物A选择的行为及其类型。
@@ -160,15 +154,12 @@
     Da tu respuesta estrictamente usando el siguiente formato: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". No escribas ninguna explicación.  
     """,
     "prompt_fs_spa_rq2": """
-    Considera los siguientes escenarios de ejemplo, la acción seleccionada por la persona A y el tipo de acción que representa.
-    Escenario: "[DEO_SCENARIO]"; Acción deontológica: "[DEO_GT]"
-    Escenario: "[UTI_SCENARIO]"; Acción utilitarista: "[UTI_GT]"
-    Escenario: "[RIG_SCENARIO]"; Acción basada en derechos: "[RIG_GT]"
-    Escenario: "[VIR_SCENARIO]"; Acción virtuosa: "[VIR_GT]"
+    Considere el siguiente escenario de ejemplo, la acción seleccionada por la persona A y el tipo de acción correspondiente.
+    Escenario: "[FS_SCENARIO]"; Acción seleccionada: "[FS_ACTION]"; Tipo de acción: "[FS_ACTION_TYPE]"
 
-    Ahora, dado el siguiente escenario y la acción tomada por la persona A, tu tarea es identificar qué tipo de acción ha tomado A entre las siguientes: ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
-    Escenario: "[SCENARIO]", posibles acciones: "[ACTIONS]", y acción tomada: "[SELECTED_ACTION]".
-    Proporciona estrictamente tu respuesta en el siguiente formato: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". No escribas ninguna explicación.
+    Ahora, dado el siguiente escenario y la acción tomada por la persona A, su tarea es identificar el tipo de acción entre las siguientes ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
+    Escenario: "[SCENARIO]", acciones posibles: "[ACTIONS]", y acción tomada: "[SELECTED_ACTION]".
+    Proporcione su respuesta estrictamente usando el siguiente formato: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". No escribas ninguna explicación.
     """,
     "prompt_fs2_spa_rq2" : """
     Considere el siguiente escenario de ejemplo, la acción seleccionada por la persona A y el tipo de acción correspondiente.
@@ -221,15 +212,12 @@
     Строго дайте ваш ответ, используя следующий формат: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". Не пишите никаких объяснений.  
     """,
     "prompt_fs_rus_rq2": """
-    Рассмотрите следующие примеры сценариев, действия, выбранные человеком A, и тип этих действий.
-    Сценарий: "[DEO_SCENARIO]"; Деонтологическое действие: "[DEO_GT]"
-    Сценарий: "[UTI_SCENARIO]"; Утилитаристское действие: "[UTI_GT]"
-    Сценарий: "[RIG_SCENARIO]"; Действие, основанное на правах: "[RIG_GT]"
-    Сценарий: "[VIR_SCENARIO]"; Добродетельное действие: "[VIR_GT]"
+    Рассмотрите следующий пример сценария, действие выбранное человеком А, и тип этого действия.
+    Сценарий: "[FS_SCENARIO]"; Выбранное действие: "[FS_ACTION]"; Тип действия: "[FS_ACTION_TYPE]"
 
-    Теперь, учитывая следующий сценарий и действие, предпринятое человеком A, ваша задача -определить, к какому из следующих типов относится выбранное действие: ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
-    Сценарий: "[SCENARIO]", возможные действия: "[ACTIONS]", и предпринятое действие: "[SELECTED_ACTION]".
-    Строго предоставьте ваш ответ в следующем формате: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". Не давайте никаких объяснений.
+    Теперь, учитывая следующий сценарий и действие, которое совершил человек А, определите тип действия из списка ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
+    Сценарий: "[SCENARIO]", возможные действия: "[ACTIONS]", выбранное действие: "[SELECTED_ACTION]".
+    Строго придерживайтесь следующего формата ответа: "Selected action is <'Deontological', 'Utilitarianism', 'Rights-based' или 'Virtous'>.". Не добавляйте пояснений.
     """,
     "prompt_fs2_rus_rq2" : """
     Рассмотрите следующий пример сценария, действие выбранное человеком А, и тип этого действия.
@@ -282,15 +270,12 @@
     قدم إجابتك بدقة باستخدام التنسيق التالي: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". لا تكتب أي تفسير.  
     """,
     "prompt_fs_ara_rq2": """
-    ضع في اعتبارك الأمثلة التالية من السيناريوهات,  والإجراءات التي اختارها الشخص A,  ونوع كل إجراء.
-    السيناريو: "[DEO_SCENARIO]"; الإجراء الأخلاقي وفقًا للواجبية: "[DEO_GT]"
-    السيناريو: "[UTI_SCENARIO]"; الإجراء النفعي: "[UTI_GT]"
-    السيناريو: "[RIG_SCENARIO]"; الإجراء القائم على الحقوق: "[RIG_GT]"
-    السيناريو: "[VIR_SCENARIO]"; الإجراء الفاضل: "[VIR_GT]"
+    ضع في اعتبارك سيناريو المثال التالي، والإجراء الذي اختاره الشخص (أ)، ونوع هذا الإجراء.
+    السيناريو: "[FS_SCENARIO]"؛ الإجراء المختار: "[FS_ACTION]"؛ نوع الإجراء: "[FS_ACTION_TYPE]"
 
-    الآن,  بالنظر إلى السيناريو التالي والإجراء الذي اتخذه الشخص A,  مهمتك هي تحديد نوع الإجراء الذي اتخذه A من بين الأنواع التالية: ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
-    السيناريو: "[SCENARIO]",  الإجراءات المحتملة: "[ACTIONS]",  والإجراء المتخذ: "[SELECTED_ACTION]".
-    قدم إجابتك بدقة وفقًا للتنسيق التالي: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". لا تكتب أي تفسير.
+    الآن، بالنظر إلى السيناريو التالي والإجراء الذي اتخذه الشخص (أ)، مهمتك هي تحديد نوع الإجراء من القائمة التالية ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous'].
+    السيناريو: "[SCENARIO]"، الإجراءات المحتملة: "[ACTIONS]"، والإجراء الذي تم اتخاذه: "[SELECTED_ACTION]".
+    التزم بشكل صارم بتنسيق الإجابة التالي: "Selected action is <'Deontological' أو 'Utilitarianism' أو 'Rights-based' أو 'Virtous'>.". لا تقدم أي تفسيرات.
     """,
     "prompt_fs2_ara_rq2" : """
     ضع في اعتبارك سيناريو المثال التالي، والإجراء الذي اختاره الشخص (أ)، ونوع هذا الإجراء.
@@ -344,15 +329,12 @@
     कृपया अपना उत्तर निम्नलिखित प्रारूप का पालन करते हुए दें: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>.". कोई भी स्पष्टीकरण न लिखें।  
     """,
     "prompt_fs_hin_rq2": """
-    निम्नलिखित उदाहरण परिदृश्यों, व्यक्ति A द्वारा चुने गए कार्यों, और उन कार्यों के प्रकारों पर विचार करें।
-    परिदृश्य: "[DEO_SCENARIO]"; दायित्व-आधारित कार्य: "[DEO_GT]"
-    परिदृश्य: "[UTI_SCENARIO]"; उपयोगितावादी कार्य: "[UTI_GT]"
-    परिदृश्य: "[RIG_SCENARIO]"; अधिकार-आधारित कार्य: "[RIG_GT]"
-    परिदृश्य: "[VIR_SCENARIO]"; गुणी कार्य: "[VIR_GT]"
+    निम्नलिखित उदाहरण परिदृश्य, व्यक्ति A द्वारा चुनी गई कार्यवाही, और उस कार्य के प्रकार पर विचार करें।
+    परिदृश्य: "[FS_SCENARIO]"; चयनित कार्य: "[FS_ACTION]"; कार्य का प्रकार: "[FS_ACTION_TYPE]"
 
-    अब, निम्नलिखित परिदृश्य और व्यक्ति A द्वारा लिए गए कार्य को देखते हुए, आपका कार्य यह पहचानना है कि A ने निम्नलिखित में से कौन सा कार्य किया: ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous']।
-    परिदृश्य: "[SCENARIO]", संभावित कार्य: "[ACTIONS]", और लिया गया कार्य: "[SELECTED_ACTION]"।
-    अपना उत्तर सख्ती से निम्नलिखित प्रारूप में दें: "Selected action is <'Deontological' or 'Utilitarianism' or 'Rights-based' or 'Virtous'>."। कोई व्याख्या न लिखें।
+    अब, निम्नलिखित परिदृश्य और व्यक्ति A द्वारा की गई कार्यवाही को देखते हुए, निम्नलिखित में से कार्य का प्रकार पहचानें ['Deontological', 'Utilitarianism', 'Rights-based', 'Virtous']।
+    परिदृश्य: "[SCENARIO]", संभावित कार्य: "[ACTIONS]", और चयनित कार्य: "[SELECTED_ACTION]"।
+    कड़ाई से निम्नलिखित प्रारूप में उत्तर दें: "Selected action is <'Deontological' या 'Utilitarianism' या 'Rights-based' या 'Virtous'>."। कोई स्पष्टीकरण न जोड़ें।
     """,
     "prompt_fs2_hin_rq2" : """
     निम्नलिखित उदाहरण परिदृश्य, व्यक्ति A द्वारा चुनी गई कार्यवाही, और उस कार्य के प्रकार पर विचार करें।
