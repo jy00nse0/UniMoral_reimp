@@ -204,7 +204,7 @@ if __name__ == "__main__":
     parser.add_argument('--model', default='meta-llama/Meta-Llama-3.1-8B-Instruct', type=str, help='Model name for pipeline')
     parser.add_argument('--language', default='English', type=str, help='Language out of ["English", "Chinese", "Russian", "Arabic", "Spanish", and "Hindi"]')
     parser.add_argument('--mode', default='desc', type=str, help='Mode out of ["desc", "moral", "culture", "fs", "np"]')
-    parser.add_argument('--batch_size', default=4, type=int, help='Batch size used for generation')
+    parser.add_argument('--batch_size', default=8, type=int, help='Batch size used for generation')
     parser.add_argument('--debug_only', action='store_true', help='프롬프트 샘플 출력 후 즉시 종료 (모델 로딩 없음)')
     args = parser.parse_args()
 
@@ -220,8 +220,13 @@ if __name__ == "__main__":
     PROMPTS = ast.literal_eval(PROMPTS)
 
     if not debug_only:
-        pipe = pipeline("text-generation", model=model_name, device_map="auto",
-                        torch_dtype=torch.bfloat16, token=access_token, truncation=True)
+        tokenizer = AutoTokenizer.from_pretrained(model_name, token=access_token)
+        if tokenizer.pad_token is None:
+            tokenizer.pad_token = tokenizer.eos_token
+        tokenizer.padding_side = "left"  # 배치 생성 시 디코더 전용 모델은 left padding 필수
+        pipe = pipeline("text-generation", model=model_name, tokenizer=tokenizer, device_map="auto",
+                        torch_dtype=torch.bfloat16, token=access_token, truncation=True,
+                        batch_size=batch_size)
 
     data_file_rq123 = f"Final_data/{language}_long.csv"
     data_file_rq1 = f"Final_data/{language}_short.csv"
@@ -299,7 +304,7 @@ if __name__ == "__main__":
         batch = formatted_prompts[i:i+batch_size]
         outputs = pipe(
             batch,
-            max_new_tokens=2000
+            max_new_tokens=500
         )
         generated_outputs.extend(outputs)
 
