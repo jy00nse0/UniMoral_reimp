@@ -165,6 +165,8 @@ def parse_scenario(scenario_str):
         pass
     scenario_str = scenario_str.replace('<unk>', '')
     return scenario_str
+
+def read_data_RQ2(data_file_long):
     print("Reading data...")
     data = pd.read_csv(data_file_long)
     data = data[['Scenario_id', 'Annotator_id', 'Scenario', 'Possible_actions', 'Selected_action', 'Action_criteria', 'Moral_values', 'Cultural_values', 'Annotator_self_description']]
