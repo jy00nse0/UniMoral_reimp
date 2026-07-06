@@ -13,7 +13,8 @@ pip install \
     numpy \
     bert-score \
     nltk \
-    sacrebleu
+    sacrebleu \
+    accelerate
 
 echo "=== NLTK 데이터 다운로드 ==="
 python3 -c "import nltk; nltk.download('wordnet'); nltk.download('punkt')"
