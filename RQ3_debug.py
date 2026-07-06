@@ -52,6 +52,7 @@ else:
     print(f"[INFO] transformers {transformers.__version__} >= 4.43 — 패치 불필요")
 
 from transformers import pipeline
+from transformers import AutoTokenizer
 from huggingface_hub import login
 import argparse
 import pandas as pd
@@ -252,7 +253,7 @@ if __name__ == "__main__":
                          help='Language out of ["English", "Chinese", "Russian", "Arabic", "Spanish", and "Hindi"]')
     parser.add_argument('--mode', default='desc', type=str,
                          help='Mode out of ["desc", "moral", "culture", "desc_moral", "desc_culture", "moral_culture", "desc_moral_culture", "fs"]')
-    parser.add_argument('--batch_size', default=4, type=int, help='Batch size used for generation')
+    parser.add_argument('--batch_size', default=8, type=int, help='Batch size used for generation')
     parser.add_argument('--checkpoint_every', default=20, type=int,
                          help='[수정 추가] 몇 배치마다 중간 결과를 저장할지. 런타임 중단 대비.')
     parser.add_argument('--debug_only', action='store_true', help='프롬프트 샘플 출력 후 즉시 종료 (모델 로딩 없음)')
@@ -274,7 +275,12 @@ if __name__ == "__main__":
     PROMPTS = ast.literal_eval(PROMPTS)
 
     if not debug_only:
-        pipe = pipeline("text-generation", model=model_name, device_map="auto", truncation=True, trust_remote_code=True)
+        tokenizer = AutoTokenizer.from_pretrained(model_name, token=access_token, trust_remote_code=True)
+        if tokenizer.pad_token is None:
+            tokenizer.pad_token = tokenizer.eos_token
+        tokenizer.padding_side = "left"  # 배치 생성 시 디코더 전용 모델은 left padding 필수
+        pipe = pipeline("text-generation", model=model_name, tokenizer=tokenizer, device_map="auto",
+                        truncation=True, trust_remote_code=True, batch_size=batch_size)
 
     # [수정] instruct 모델 여부에 따라 max_new_tokens, dtype 등 일관성 유지
     is_instruct = "instruct" in model_name.lower()
@@ -360,7 +366,7 @@ if __name__ == "__main__":
 
     for i, batch_start in enumerate(tqdm(range(0, len(formatted_prompts), batch_size), desc="Generating batches")):
         batch = formatted_prompts[batch_start:batch_start + batch_size]
-        outputs = pipe(batch, max_new_tokens=2000)
+        outputs = pipe(batch, max_new_tokens=500)
         generated_outputs.extend(outputs)
 
         if checkpoint_every > 0 and (i + 1) % checkpoint_every == 0:
