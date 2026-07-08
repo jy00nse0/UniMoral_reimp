@@ -1,83 +1,7 @@
 import os
 os.environ['HF_HOME'] = '<Path for HF cache>'
-# ── Llama 3.1 호환성 패치 (RQ1과 동일) ───────────────────────────────────────
-import transformers
-from packaging.version import Version
-
-_tf_ver = Version(transformers.__version__)
-_need_ver = Version("4.43.0")
-
-if _tf_ver < _need_ver:
-    print(f"[INFO] transformers {_tf_ver} < 4.43 — Llama 3.1 패치 적용")
-
-    from transformers.models.llama import configuration_llama as _llama_cfg
-
-    def _rope_scaling_validation_patched(self):
-        if self.rope_scaling is None:
-            return
-        if not isinstance(self.rope_scaling, dict):
-            raise ValueError("`rope_scaling` must be a dict or None.")
-        if "rope_type" in self.rope_scaling and "type" not in self.rope_scaling:
-            self.rope_scaling["type"] = self.rope_scaling["rope_type"]
-        required_keys = {"type", "factor"}
-        if not required_keys.issubset(self.rope_scaling.keys()):
-            raise ValueError(f"`rope_scaling` must contain {required_keys}, got {self.rope_scaling}.")
-
-    _llama_cfg.LlamaConfig._rope_scaling_validation = _rope_scaling_validation_patched
-
-    from transformers.models.llama import modeling_llama as _llama_mod
-    from transformers.models.llama.modeling_llama import (
-        LlamaRotaryEmbedding, LlamaLinearScalingRotaryEmbedding,
-        LlamaDynamicNTKScalingRotaryEmbedding
-    )
-
-    def _init_rope_patched(self):
-        if self.config.rope_scaling is None:
-            self.rotary_emb = LlamaRotaryEmbedding(
-                self.head_dim,
-                max_position_embeddings=self.config.max_position_embeddings,
-                base=self.config.rope_theta,
-            )
-        else:
-            scaling_type = self.config.rope_scaling.get("rope_type",
-                           self.config.rope_scaling.get("type", "linear"))
-            scaling_factor = self.config.rope_scaling["factor"]
-            if scaling_type == "linear":
-                self.rotary_emb = LlamaLinearScalingRotaryEmbedding(
-                    self.head_dim,
-                    max_position_embeddings=self.config.max_position_embeddings,
-                    scaling_factor=scaling_factor,
-                    base=self.config.rope_theta,
-                )
-            elif scaling_type == "dynamic":
-                self.rotary_emb = LlamaDynamicNTKScalingRotaryEmbedding(
-                    self.head_dim,
-                    max_position_embeddings=self.config.max_position_embeddings,
-                    scaling_factor=scaling_factor,
-                    base=self.config.rope_theta,
-                )
-            elif scaling_type in ("llama3", "longrope", "yarn"):
-                self.rotary_emb = LlamaDynamicNTKScalingRotaryEmbedding(
-                    self.head_dim,
-                    max_position_embeddings=self.config.max_position_embeddings,
-                    scaling_factor=scaling_factor,
-                    base=self.config.rope_theta,
-                )
-            else:
-                raise ValueError(f"Unknown RoPE scaling type {scaling_type}")
-
-    for _cls_name in ("LlamaAttention", "LlamaFlashAttention2", "LlamaSdpaAttention"):
-        _cls = getattr(_llama_mod, _cls_name, None)
-        if _cls is not None:
-            _cls._init_rope = _init_rope_patched
-
-    print("[PATCH] LlamaConfig + LlamaAttention._init_rope patched for Llama 3.1.")
-else:
-    print(f"[INFO] transformers {_tf_ver} >= 4.43 — 패치 불필요")
-# ─────────────────────────────────────────────────────────────────────────────
 
 from transformers import pipeline
-from transformers import AutoTokenizer
 from huggingface_hub import login
 import argparse
 import pandas as pd
@@ -87,15 +11,8 @@ import json
 import random
 import numpy as np
 import torch
-# [BUG 1] calculate_metrics에서 defaultdict 사용했으나 import 누락
-from collections import defaultdict
 
-from pathlib import Path
-_token_path = Path("access_token.txt")
-with _token_path.open("r", encoding="utf-8") as _f:
-    access_token = _f.readline().strip()
-if not access_token:
-    raise ValueError(f"Empty token in {_token_path.resolve()}")
+access_token = "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"
 login(token = access_token)
 
 def set_seed(seed):
@@ -154,32 +71,19 @@ def dict_to_list_of_vectors(data):
     data = ast.literal_eval(data)
     return list(data.values())
 
-def parse_scenario(scenario_str):
-    """CSV에 ['...'] 형태로 저장된 시나리오를 순수 문자열로 변환.
-    Chinese의 <unk> 토큰도 동시에 제거."""
-    try:
-        parsed = ast.literal_eval(scenario_str)
-        if isinstance(parsed, list) and len(parsed) > 0:
-            scenario_str = parsed[0]
-    except:
-        pass
-    scenario_str = scenario_str.replace('<unk>', '')
-    return scenario_str
-
 def read_data_RQ2(data_file_long):
     print("Reading data...")
     data = pd.read_csv(data_file_long)
     data = data[['Scenario_id', 'Annotator_id', 'Scenario', 'Possible_actions', 'Selected_action', 'Action_criteria', 'Moral_values', 'Cultural_values', 'Annotator_self_description']]
     print("Data read -- ", len(data), "\n", data.columns, "\n", data.head())
 
-    # [BUG 2] 반복문 내 람다에서 루프 변수 i가 outer scope의 i와 충돌 → j로 변경
     main_data = []
     for i in tqdm(range(len(data))):
         moral_vector = dict_to_list_of_vectors(data['Moral_values'][i])
         culture_vector = dict_to_list_of_vectors(data['Cultural_values'][i])
 
-        moral_idx = sorted(range(len(moral_vector)), key=lambda j: moral_vector[j], reverse=True)
-        culture_idx = sorted(range(len(culture_vector)), key=lambda j: culture_vector[j], reverse=True)
+        moral_idx = sorted(range(len(moral_vector)), key=lambda i: moral_vector[i], reverse=True)
+        culture_idx = sorted(range(len(culture_vector)), key=lambda i: culture_vector[i], reverse=True)
 
         if type(ast.literal_eval(data['Possible_actions'][i])[0]) != str:
             sel_act = act2idx[data['Selected_action'][i]] + ": " + ast.literal_eval(data['Possible_actions'][i])[0][data['Selected_action'][i]-1]
@@ -195,7 +99,7 @@ def read_data_RQ2(data_file_long):
         this_inst = {
             'scenario_id': data['Scenario_id'][i],
             'annotator_id': data['Annotator_id'][i],
-            'scenario': parse_scenario(data['Scenario'][i]),
+            'scenario': data['Scenario'][i],
             'actions': data['Possible_actions'][i],
             'action_selected': sel_act,
             'gt': action_criteria_list,
@@ -226,12 +130,14 @@ def read_data_RQ2(data_file_long):
         action_criteria = annotator_data['Action_criteria'][0]
         action_criteria_list = [int(x) for x in ast.literal_eval(action_criteria)]
         action_criteria_list = np.array(action_criteria_list)
-        # [BUG 3] 디버그 print문 제거 (실행 중 수천 번 출력되어 로그 오염)
+        print("action_criteria_list: ", action_criteria_list)
+        print("np.where(action_criteria_list == action_criteria_list.max()): ", np.where(action_criteria_list == action_criteria_list.max()))
         action_criteria_list = np.where(action_criteria_list == action_criteria_list.max())[0]
+        print("action_criteria_list = np.where(action_criteria_list == action_criteria_list.max())[0]: ", np.where(action_criteria_list == action_criteria_list.max())[0])
         action_criteria_list = ", ".join([idx2label[x] for x in action_criteria_list])
 
         inst['fs_data'] = {
-            'fs_scenario' : parse_scenario(annotator_data['Scenario'][0]),
+            'fs_scenario' : annotator_data['Scenario'][0],
             'fs_possible_actions' : annotator_data['Possible_actions'][0],
             'fs_selected_action': sel_act,
             'fs_action_type': action_criteria_list
@@ -241,12 +147,10 @@ def read_data_RQ2(data_file_long):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    # [BUG 4] 기본 모델이 Meta-Llama-3-8B (Instruct 아님) → Instruct 버전으로 수정
-    parser.add_argument('--model', default='meta-llama/Meta-Llama-3.1-8B-Instruct', type=str, help='Model name for pipeline')
+    parser.add_argument('--model', default='meta-llama/Meta-Llama-3-8B', type=str, help='Model name for pipeline')       ## meta-llama/Meta-Llama-3-8B
     parser.add_argument('--language', default='English', type=str, help='Language out of ["English", "Chinese", "Russian", "Arabic", "Spanish", and "Hindi"]')
     parser.add_argument('--mode', default='desc', type=str, help='Mode out of ["desc", "moral", "culture", "fs", "np"]')
-    parser.add_argument('--batch_size', default=8, type=int, help='Batch size used for generation')
-    parser.add_argument('--debug_only', action='store_true', help='프롬프트 샘플 출력 후 즉시 종료 (모델 로딩 없음)')
+    parser.add_argument('--batch_size', default=4, type=int, help='Batch size used for generation')
     args = parser.parse_args()
 
     RQ = 2
@@ -254,27 +158,21 @@ if __name__ == "__main__":
     language = args.language
     model_name = args.model
     batch_size = args.batch_size
-    debug_only = args.debug_only
 
     with open("PROMPTS2.txt", "r") as f:
         PROMPTS = f.read()
     PROMPTS = ast.literal_eval(PROMPTS)
 
-    if not debug_only:
-        tokenizer = AutoTokenizer.from_pretrained(model_name, token=access_token)
-        if tokenizer.pad_token is None:
-            tokenizer.pad_token = tokenizer.eos_token
-        tokenizer.padding_side = "left"  # 배치 생성 시 디코더 전용 모델은 left padding 필수
-        pipe = pipeline("text-generation", model=model_name, tokenizer=tokenizer, device_map="auto",
-                        torch_dtype=torch.bfloat16, token=access_token, truncation=True,
-                        batch_size=batch_size)
+    pipe = pipeline("text-generation", model=model_name, device_map="auto", truncation=True)
 
     data_file_rq2 = f"Final_data/{language}_long.csv"
 
     data = read_data_RQ2(data_file_rq2)
 
+    print(data)
     formatted_prompts = []
     ground_truth = []
+    predictions = []
 
     for i, inst in tqdm(enumerate(data)):
         ground_truth.append(inst['gt'])
@@ -289,11 +187,13 @@ if __name__ == "__main__":
 
         prompt = prompt.replace("[SCENARIO]", inst['scenario'])
         prompt = prompt.replace("[ACTIONS]", possible_actions)
-        # [BUG 5] fs가 아닌 경우 inst['action_selected'][0]으로 첫 글자만 전달 → 전체 문자열 전달
-        prompt = prompt.replace("[SELECTED_ACTION]", inst['action_selected'])
+        if mode != 'fs':
+            prompt = prompt.replace("[SELECTED_ACTION]", inst['action_selected'][0])
+        else:
+            prompt = prompt.replace("[SELECTED_ACTION]", inst['action_selected'])
         prompt = prompt.replace("[DESC]", inst['desc'])
-        prompt = prompt.replace("[MORAL]", " ".join(map(str, inst['moral_vector'])))
-        prompt = prompt.replace("[CULTURE]", " ".join(map(str, inst['culture_vector'])))
+        prompt = prompt.replace("[MORAL]", " ".join(map(str,inst['moral_vector'])))
+        prompt = prompt.replace("[CULTURE]", " ".join(map(str,inst['culture_vector'])))
 
         prompt = prompt.replace("[MORAL_VALUE_1]", inst['moral_idx'][0])
         prompt = prompt.replace("[MORAL_VALUE_2]", inst['moral_idx'][1])
@@ -313,31 +213,25 @@ if __name__ == "__main__":
         prompt = prompt.replace("[FS_ACTION]", inst['fs_data']['fs_selected_action'])
         prompt = prompt.replace("[FS_ACTION_TYPE]", inst['fs_data']['fs_action_type'])
 
-        formatted_prompt = f"""
+        formatted_prompt = formatted_prompt = f"""
             ### Instruction:
             {prompt}
 
             ### Response:
         """
 
-        if i < 5:
-            print(f"\n{'='*60}")
-            print(f"[DEBUG] Sample {i+1} / 5")
-            print(f"{'='*60}")
-            print(formatted_prompt)
-            print(f"{'='*60}\n")
+        if i == 0:
+            print("Example prompt: ", formatted_prompt)
 
         formatted_prompts.append(formatted_prompt)
-
-    if debug_only:
-        print(f"[DEBUG] --debug_only 모드: 프롬프트 확인 완료. 종료합니다.")
-        import sys; sys.exit(0)
 
     print("\nGenerating responses...")
     generated_outputs = []
     for i in tqdm(range(0, len(formatted_prompts), batch_size), desc="Generating batches"):
         batch = formatted_prompts[i:i+batch_size]
-        outputs = pipe(batch, max_new_tokens=500)
+        outputs = pipe(
+            batch
+        )
         generated_outputs.extend(outputs)
 
     unsure_preds = 0
@@ -349,9 +243,9 @@ if __name__ == "__main__":
             generated_text = generated_text.split("Selected action is ")[1].strip()
         except:
             print("generated_text: ", generated_text)
+            generated_text = generated_text
         response = generated_text.lower().strip()
-        # [BUG 6] 'deonological' 오타 → 'deontological'로 수정
-        if 'deontological' in response:
+        if 'deonological' in response:
             predictions.append(label2idx['Deontological'])
         elif 'utilitarianism' in response:
             predictions.append(label2idx['Utilitarianism'])
@@ -366,23 +260,21 @@ if __name__ == "__main__":
     ground_truth = [[label2idx[x] for x in y] for y in ground_truth]
 
     print(ground_truth, predictions)
-    precision, recall, f1_score, weighted_f1 = calculate_metrics(ground_truth, predictions)
+    accuracy, precision, recall, f1 = calculate_metrics(ground_truth, predictions)
 
     results = {
         'predictions': predictions,
         'ground truth': ground_truth,
+        'accuracy': accuracy,
         'precision': precision,
         'recall': recall,
-        'f1_score': f1_score,
-        'weighted_f1': weighted_f1
+        'f1 score': f1
     }
 
+    print(f"Accuracy: {accuracy}")
     print(f"Precision: {precision}")
     print(f"Recall: {recall}")
-    print(f"F1 Score (per class): {f1_score}")
-    print(f"Weighted F1: {weighted_f1}")
+    print(f"F1 Score: {f1}")
 
-    import os
-    os.makedirs("Final_results", exist_ok=True)
-    with open(f"Final_results/{language}_RQ{RQ}_{mode}_{model_name.split('/')[-1]}.json", "w") as f:
+    with open(f"Final_results/{language}_RQ{RQ}_{mode}_{model_name.split('/')[-1]}.json","w") as f:
         json.dump(results, f)
