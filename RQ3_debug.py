@@ -12,7 +12,7 @@ import random
 import numpy as np
 import torch
 
-access_token = "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"
+access_token = "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"
 login(token = access_token)
 
 def set_seed(seed):
@@ -144,7 +144,7 @@ def read_data_RQ3(data_file_long):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model', default='meta-llama/Meta-Llama-3-8B', type=str, help='Model name for pipeline')       ## meta-llama/Meta-Llama-3-8B
+    parser.add_argument('--model', default='meta-llama/Llama-3.1-8B-Instruct', type=str, help='Model name for pipeline')       ## meta-llama/Meta-Llama-3-8B
     parser.add_argument('--language', default='English', type=str, help='Language out of ["English", "Chinese", "Russian", "Arabic", "Spanish", and "Hindi"]')
     parser.add_argument('--mode', default='desc', type=str, help='Mode out of ["desc", "moral", "culture", "desc_moral", "desc_culture", "moral_culture", "desc_moral_culture", "fs"]')
     parser.add_argument('--batch_size', default=4, type=int, help='Batch size used for generation')
@@ -226,7 +226,7 @@ if __name__ == "__main__":
     for i in tqdm(range(0, len(formatted_prompts), batch_size), desc="Generating batches"):
         batch = formatted_prompts[i:i+batch_size]
         outputs = pipe(
-            batch
+            batch, max_length=2000
         )
         generated_outputs.extend(outputs)
 
