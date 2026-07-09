@@ -20,7 +20,7 @@ from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 from nltk.translate.meteor_score import single_meteor_score
 from bert_score import score
 
-access_token =  "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"
+access_token =  "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"
 login(token = access_token)
 
 def set_seed(seed):
